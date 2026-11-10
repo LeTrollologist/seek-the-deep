@@ -29,6 +29,7 @@ Keep the whole conversation. Take it with you as Markdown, plain text, HTML, JSO
 <p align="center">
   <a href="#install"><img src="assets/buttons/install.svg" alt="Install extension" height="46" /></a>
   <a href="#formats"><img src="assets/buttons/formats.svg" alt="Five formats" height="46" /></a>
+  <br /><br />
   <a href="PRIVACY.md"><img src="assets/buttons/privacy.svg" alt="Privacy notes" height="46" /></a>
   <a href="https://github.com/LeTrollologist/seek-the-deep"><img src="assets/buttons/source.svg" alt="Source code" height="46" /></a>
 </p>

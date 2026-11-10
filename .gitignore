@@ -1,0 +1,10 @@
+# Local packaging artifacts
+*.zip
+*.crx
+*.pem
+
+# Dependencies and editor files
+node_modules/
+.tmp/
+.DS_Store
+Thumbs.db

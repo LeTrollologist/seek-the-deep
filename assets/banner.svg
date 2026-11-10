@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 520" width="100%" height="100%" role="img" aria-labelledby="title desc">
+  <title id="title">Seek the Deep</title>
+  <desc id="desc">A deep-blue ocean banner with a humpback whale, sonar rings, and the words Seek the Deep.</desc>
+  <defs>
+    <linearGradient id="abyss" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#03101E"/>
+      <stop offset="0.48" stop-color="#06243D"/>
+      <stop offset="1" stop-color="#073B5F"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F0FBFE"/>
+      <stop offset="0.55" stop-color="#C6EDF8"/>
+      <stop offset="1" stop-color="#7DD3E8"/>
+    </linearGradient>
+    <linearGradient id="whaleGrad" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#8ADCEF" stop-opacity="0.95"/>
+      <stop offset="0.55" stop-color="#3A9BC4" stop-opacity="0.88"/>
+      <stop offset="1" stop-color="#115B84" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="bellyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#B8EBF6" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#4EA7C9" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="waveA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0B3E61" stop-opacity="0"/>
+      <stop offset="0.25" stop-color="#14618C" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#2A8BB4" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#082945" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="waveB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#041321" stop-opacity="0"/>
+      <stop offset="0.38" stop-color="#0A3858" stop-opacity="0.85"/>
+      <stop offset="0.7" stop-color="#0E4E75" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#041321" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#5CC9E6" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#5CC9E6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8BE3F4" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#8BE3F4" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="whaleGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="0" stdDeviation="9" flood-color="#5CC9E6" flood-opacity="0.35"/>
+    </filter>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#7DD3E8" stroke-opacity="0.045" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1.4" fill="#7DD3E8" fill-opacity="0.14"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="520" fill="url(#abyss)"/>
+  <rect width="1600" height="520" fill="url(#grid)"/>
+
+  <!-- Surface light breaking into the water column -->
+  <g opacity="0.8">
+    <polygon points="420,-40 610,-40 1040,520 690,520" fill="url(#beam)"/>
+    <polygon points="740,-40 850,-40 1280,520 1090,520" fill="url(#beam)" opacity="0.7"/>
+    <polygon points="120,-40 210,-40 580,520 350,520" fill="url(#beam)" opacity="0.45"/>
+  </g>
+  <ellipse cx="1220" cy="205" rx="310" ry="250" fill="url(#glow)"/>
+  <ellipse cx="330" cy="410" rx="360" ry="200" fill="#0E4F7D" opacity="0.11" filter="url(#soft)"/>
+
+  <!-- Depth ruler -->
+  <g stroke="#7DD3E8" stroke-opacity="0.28" stroke-width="1">
+    <path d="M54 72V438" stroke-dasharray="2 7"/>
+    <path d="M48 82h12M48 166h8M48 250h12M48 334h8M48 418h12"/>
+  </g>
+  <g fill="#7DD3E8" fill-opacity="0.48" font-family="'Cascadia Code', Consolas, monospace" font-size="10" letter-spacing="2">
+    <text x="70" y="85">000 m</text>
+    <text x="70" y="253">200 m</text>
+    <text x="70" y="421">400 m</text>
+  </g>
+
+  <!-- Bioluminescent particles -->
+  <g fill="#A9E6F5">
+    <circle cx="880" cy="78" r="2.1" opacity="0.7"/>
+    <circle cx="948" cy="127" r="1.2" opacity="0.5"/>
+    <circle cx="1082" cy="64" r="1.6" opacity="0.65"/>
+    <circle cx="1432" cy="108" r="2.3" opacity="0.6"/>
+    <circle cx="1514" cy="238" r="1.4" opacity="0.5"/>
+    <circle cx="1350" cy="352" r="1.6" opacity="0.42"/>
+    <circle cx="774" cy="390" r="1.3" opacity="0.5"/>
+    <circle cx="700" cy="438" r="2" opacity="0.35"/>
+    <circle cx="452" cy="76" r="1.4" opacity="0.4"/>
+    <circle cx="250" cy="330" r="1.2" opacity="0.45"/>
+    <circle cx="1215" cy="420" r="1.8" opacity="0.4"/>
+  </g>
+
+  <!-- Sonar rings -->
+  <g fill="none" stroke="#7DD3E8" stroke-opacity="0.3">
+    <circle cx="1150" cy="242" r="138" stroke-dasharray="1 8"/>
+    <circle cx="1150" cy="242" r="186" stroke-dasharray="1 12" opacity="0.6"/>
+    <circle cx="1150" cy="242" r="235" stroke-dasharray="1 16" opacity="0.34"/>
+  </g>
+  <g fill="none" stroke="#7DD3E8" stroke-opacity="0.6" stroke-linecap="round">
+    <path d="M1308 160a96 96 0 0 1 0 164" stroke-width="1.5"/>
+    <path d="M1336 136a136 136 0 0 1 0 212" opacity="0.45"/>
+  </g>
+
+  <!-- Humpback whale -->
+  <g transform="translate(855 96)" filter="url(#whaleGlow)">
+    <path d="M92 205C147 157 247 133 356 152C442 167 510 202 568 246C585 259 603 269 623 274C593 295 570 324 558 360C534 327 505 306 470 299C366 325 242 310 151 261C118 244 99 226 92 205Z" fill="url(#whaleGrad)" stroke="#A9E6F5" stroke-opacity="0.5" stroke-width="1.5"/>
+    <path d="M118 220C178 185 264 172 354 187C434 200 497 231 550 268C520 278 490 285 458 288C361 304 256 288 178 249C149 235 128 228 118 220Z" fill="url(#bellyGrad)"/>
+    <path d="M623 274C661 245 702 224 744 218C720 250 704 279 696 306C728 312 762 331 782 360C742 347 701 340 666 341C648 324 633 300 623 274Z" fill="url(#whaleGrad)" stroke="#A9E6F5" stroke-opacity="0.45" stroke-width="1.4"/>
+    <path d="M329 307C346 355 382 390 431 407C402 373 383 342 376 310C360 315 344 314 329 307Z" fill="#2C86AC" fill-opacity="0.72" stroke="#A9E6F5" stroke-opacity="0.32" stroke-width="1.2"/>
+    <path d="M126 216C158 218 188 228 212 245" fill="none" stroke="#D9F7FD" stroke-opacity="0.65" stroke-width="2" stroke-linecap="round"/>
+    <path d="M153 238C188 247 219 262 242 282" fill="none" stroke="#D9F7FD" stroke-opacity="0.28" stroke-width="1.3" stroke-linecap="round"/>
+    <g fill="none" stroke="#D9F7FD" stroke-opacity="0.22" stroke-width="1.2" stroke-linecap="round">
+      <path d="M207 293C257 307 309 315 361 313"/>
+      <path d="M218 306C264 319 313 326 361 324"/>
+      <path d="M232 319C272 330 314 336 354 336"/>
+    </g>
+    <circle cx="151" cy="207" r="4" fill="#E9FAFE"/>
+    <circle cx="151" cy="207" r="9" fill="none" stroke="#A9E6F5" stroke-opacity="0.45"/>
+    <path d="M105 204c-12 2-22 7-30 14" fill="none" stroke="#A9E6F5" stroke-opacity="0.6" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Calf -->
+  <g transform="translate(1272 362) scale(0.34)" opacity="0.52">
+    <path d="M92 205C147 157 247 133 356 152C442 167 510 202 568 246C585 259 603 269 623 274C593 295 570 324 558 360C534 327 505 306 470 299C366 325 242 310 151 261C118 244 99 226 92 205Z" fill="#4FA9C9"/>
+    <path d="M623 274C661 245 702 224 744 218C720 250 704 279 696 306C728 312 762 331 782 360C742 347 701 340 666 341C648 324 633 300 623 274Z" fill="#4FA9C9"/>
+  </g>
+
+  <!-- Title block -->
+  <g fill="none" stroke="#7DD3E8" stroke-opacity="0.5">
+    <path d="M110 70h76" stroke-width="1.5"/>
+    <circle cx="110" cy="70" r="3" fill="#A9E6F5" stroke="none"/>
+  </g>
+  <text x="110" y="104" fill="#7DD3E8" font-family="'Cascadia Code', Consolas, monospace" font-size="12" font-weight="700" letter-spacing="5">DEEPSEEK CHAT ARCHIVER / DIVE 001</text>
+  <text x="104" y="230" fill="url(#titleGrad)" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="96" font-weight="900" letter-spacing="-2">SEEK THE DEEP</text>
+  <rect x="110" y="263" width="568" height="2" fill="#7DD3E8" fill-opacity="0.3"/>
+  <rect x="110" y="263" width="146" height="2" fill="#A9E6F5"/>
+  <text x="110" y="312" fill="#D8F4FA" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="24" font-weight="400" letter-spacing="0.4">Every answer leaves a wake.</text>
+  <text x="110" y="352" fill="#8CC9DD" font-family="'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="15" letter-spacing="1.3">LOCAL-FIRST  ·  ZERO TELEMETRY  ·  MANIFEST V3</text>
+
+  <!-- Format capsules -->
+  <g font-family="'Cascadia Code', Consolas, monospace" font-size="11" font-weight="700" letter-spacing="1">
+    <g transform="translate(110 390)">
+      <rect width="82" height="30" rx="15" fill="#0A2A45" stroke="#2E7698" stroke-opacity="0.8"/>
+      <text x="41" y="19" text-anchor="middle" fill="#B8EBF6">MARKDOWN</text>
+    </g>
+    <g transform="translate(202 390)">
+      <rect width="58" height="30" rx="15" fill="#0A2A45" stroke="#2E7698" stroke-opacity="0.8"/>
+      <text x="29" y="19" text-anchor="middle" fill="#B8EBF6">TEXT</text>
+    </g>
+    <g transform="translate(270 390)">
+      <rect width="58" height="30" rx="15" fill="#0A2A45" stroke="#2E7698" stroke-opacity="0.8"/>
+      <text x="29" y="19" text-anchor="middle" fill="#B8EBF6">HTML</text>
+    </g>
+    <g transform="translate(338 390)">
+      <rect width="58" height="30" rx="15" fill="#0A2A45" stroke="#2E7698" stroke-opacity="0.8"/>
+      <text x="29" y="19" text-anchor="middle" fill="#B8EBF6">JSON</text>
+    </g>
+    <g transform="translate(406 390)">
+      <rect width="42" height="30" rx="15" fill="#0A2A45" stroke="#2E7698" stroke-opacity="0.8"/>
+      <text x="21" y="19" text-anchor="middle" fill="#B8EBF6">PDF</text>
+    </g>
+  </g>
+
+  <!-- Foreground waves -->
+  <path d="M0 432C126 404 224 458 356 446C488 434 574 386 714 404C854 422 948 472 1088 458C1228 444 1322 394 1448 408C1522 416 1570 430 1600 442V520H0Z" fill="url(#waveA)"/>
+  <path d="M0 466C142 438 248 484 386 474C524 464 626 424 770 442C914 460 1004 500 1148 486C1292 472 1386 438 1506 452C1552 458 1582 466 1600 472V520H0Z" fill="url(#waveB)"/>
+  <path d="M0 496C168 476 292 506 454 498C616 490 714 466 886 480C1058 494 1160 514 1320 502C1424 494 1512 478 1600 486V520H0Z" fill="#03101E" fill-opacity="0.9"/>
+
+  <!-- Frame -->
+  <rect x="1" y="1" width="1598" height="518" fill="none" stroke="#7DD3E8" stroke-opacity="0.22"/>
+  <g stroke="#A9E6F5" stroke-opacity="0.7">
+    <path d="M22 44V22h22M1556 22h22v22M22 476v22h22M1556 498h22v-22"/>
+  </g>
+</svg>

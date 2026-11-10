@@ -1,0 +1,44 @@
+{
+    "manifest_version": 3,
+    "name": "Seek the Deep",
+    "short_name": "Seek the Deep",
+    "version": "1.0.0",
+    "description": "Download DeepSeek chats as Markdown, text, HTML, JSON, or PDF. Full history, processed locally.",
+    "minimum_chrome_version": "109",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage",
+        "unlimitedStorage"
+    ],
+    "host_permissions": [
+        "https://chat.deepseek.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "Export this DeepSeek chat",
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "32": "icons/icon32.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Alt+Shift+E"
+            },
+            "description": "Open Seek the Deep"
+        }
+    }
+}

@@ -184,6 +184,47 @@ test("filenames are safe and deterministic for a given date", () => {
     assert.match(DS.makeFilename({ title: "Chat" }, "md"), /\.md$/);
 });
 
+test("rate limiter enforces the cooldown and rolling window", () => {
+    const config = { maxExports: 3, windowMs: 60000, minIntervalMs: 5000 };
+    const now = 1000000;
+
+    const first = DS.evaluateExportRateLimit([], now, config);
+    assert.equal(first.allowed, true);
+    assert.equal(first.remaining, 2);
+    assert.deepEqual(first.timestamps, [now]);
+
+    const cooldown = DS.evaluateExportRateLimit([now], now + 2000, config);
+    assert.equal(cooldown.allowed, false);
+    assert.equal(cooldown.reason, "cooldown");
+    assert.equal(cooldown.retryAfterMs, 3000);
+    assert.equal(cooldown.remaining, 2);
+
+    const full = DS.evaluateExportRateLimit(
+        [now, now + 5000, now + 10000],
+        now + 12000,
+        config
+    );
+    assert.equal(full.allowed, false);
+    assert.equal(full.reason, "window");
+    assert.equal(full.remaining, 0);
+    assert.equal(full.retryAfterMs, 48000);
+
+    const afterWindowEdge = DS.evaluateExportRateLimit(
+        [now, now + 5000, now + 10000],
+        now + 70000,
+        config
+    );
+    assert.equal(afterWindowEdge.allowed, true);
+    assert.deepEqual(afterWindowEdge.timestamps, [now + 70000]);
+    assert.equal(afterWindowEdge.remaining, 2);
+});
+
+test("rate limit defaults are conservative and exported", () => {
+    assert.equal(DS.RATE_LIMIT.maxExports, 10);
+    assert.equal(DS.RATE_LIMIT.windowMs, 600000);
+    assert.equal(DS.RATE_LIMIT.minIntervalMs, 5000);
+});
+
 test("manifest references local files that exist", () => {
     const root = path.resolve(__dirname, "..");
     const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.json"), "utf8"));

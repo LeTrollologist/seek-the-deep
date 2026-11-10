@@ -368,11 +368,20 @@ main { padding: 0 15px 4px; flex: 1; }
 
 .footnote {
     min-height: 15px;
-    margin: 7px 3px 9px;
+    margin: 7px 3px 2px;
     color: var(--faint);
     font-size: 9.5px;
     line-height: 1.45;
     text-align: center;
+}
+
+.rate-note {
+    margin: 0 3px 8px;
+    color: var(--faint);
+    font-size: 8.5px;
+    line-height: 1.4;
+    text-align: center;
+    opacity: .82;
 }
 
 .app-footer {

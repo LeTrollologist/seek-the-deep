@@ -11,6 +11,11 @@ const API_ORIGIN = "https://chat.deepseek.com";
 const CLIENT_VERSION = "2.3.0";
 const REQUEST_TIMEOUT_MS = 25000;
 const MAX_PRINT_HTML_BYTES = 18 * 1024 * 1024;
+const RATE_LIMIT_STORAGE_KEY = "exportRateLimitTimestamps";
+
+// All export reservations go through this queue. That keeps two tabs from
+// racing past the same cooldown or window in the same service-worker lifetime.
+let rateLimitQueue = Promise.resolve();
 
 function isChatSender(sender) {
     const url = sender && sender.tab && sender.tab.url;
@@ -147,6 +152,51 @@ async function handleOpenPrint(message, sender) {
     return { ok: true };
 }
 
+function withRateLimitLock(work) {
+    const next = rateLimitQueue.then(work, work);
+    rateLimitQueue = next.catch(() => {});
+    return next;
+}
+
+function handleReserveExport(sender) {
+    if (!isChatSender(sender)) {
+        return { ok: false, error: "Exports can only be reserved from chat.deepseek.com." };
+    }
+
+    return withRateLimitLock(async () => {
+        const stored = await chrome.storage.local.get(RATE_LIMIT_STORAGE_KEY);
+        const result = DS.evaluateExportRateLimit(stored[RATE_LIMIT_STORAGE_KEY], Date.now());
+
+        if (!result.allowed) {
+            const seconds = Math.max(1, Math.ceil(result.retryAfterMs / 1000));
+            return {
+                ok: false,
+                code: "RATE_LIMITED",
+                error: result.reason === "window"
+                    ? `Export limit reached. Try again in ${seconds} seconds.`
+                    : `Please wait ${seconds} seconds between exports.`,
+                retryAfterMs: result.retryAfterMs,
+                remaining: result.remaining,
+                limit: result.limit,
+                windowMs: result.windowMs,
+            };
+        }
+
+        await chrome.storage.local.set({
+            [RATE_LIMIT_STORAGE_KEY]: result.timestamps,
+        });
+
+        return {
+            ok: true,
+            remaining: result.remaining,
+            limit: result.limit,
+            windowMs: result.windowMs,
+            minIntervalMs: result.minIntervalMs,
+            resetAt: result.resetAt,
+        };
+    });
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (!message || typeof message.type !== "string") return undefined;
 
@@ -155,6 +205,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         promise = handleFetchChat(message, sender);
     } else if (message.type === "DS_OPEN_PRINT") {
         promise = handleOpenPrint(message, sender);
+    } else if (message.type === "DS_RESERVE_EXPORT") {
+        promise = handleReserveExport(sender);
     } else {
         return undefined;
     }

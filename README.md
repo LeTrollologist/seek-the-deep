@@ -10,7 +10,7 @@ Keep the whole conversation. Take it with you as Markdown, plain text, HTML, JSO
 
 <p align="center">
   <a href="https://github.com/LeTrollologist/seek-the-deep/releases">
-    <img src="https://img.shields.io/badge/Release-v1.0.0-2F7FA8?style=for-the-badge&logo=github&logoColor=E9FAFE&labelColor=061A2C" alt="Release v1.0.0" />
+    <img src="https://img.shields.io/badge/Release-v1.1.0-2F7FA8?style=for-the-badge&logo=github&logoColor=E9FAFE&labelColor=061A2C" alt="Release v1.1.0" />
   </a>
   <a href="manifest.json">
     <img src="https://img.shields.io/badge/Chrome-Manifest_V3-0E4F7D?style=for-the-badge&logo=googlechrome&logoColor=E9FAFE&labelColor=061A2C" alt="Chrome Manifest V3" />
@@ -55,6 +55,7 @@ It is a small Manifest V3 extension with no build step, no server, no account, a
 | **Reasoning on request** | Include DeepSeek's thinking blocks when they are available; leave them out when you only want the answer. |
 | **Timestamps** | Add message times to Markdown, text, HTML, and PDF exports. |
 | **Local by default** | Exports are assembled in your browser. No analytics, no telemetry, no third-party upload. |
+| **Spam guard** | One export every 5 seconds, and at most 10 exports per 10 minutes. |
 | **A PDF worth reading** | The print view uses the browser's own layout and print engine — not a screenshot or an extra PDF library. |
 
 <div align="center">
@@ -77,7 +78,7 @@ Markdown preserves code fences, links, tables, lists, and blockquotes. HTML and 
 
 Requires Chrome 109+ or any Chromium browser with Manifest V3 support.
 
-1. Download the [latest release](https://github.com/LeTrollologist/seek-the-deep/releases/latest/download/seek-the-deep-1.0.0.zip) and unzip it.
+1. Download the [latest release](https://github.com/LeTrollologist/seek-the-deep/releases/latest/download/seek-the-deep-1.1.0.zip) and unzip it.
 2. Open `chrome://extensions/` — or `edge://extensions/`, `brave://extensions/`, etc.
 3. Turn on **Developer mode**.
 4. Click **Load unpacked** and select the folder containing `manifest.json`.
@@ -115,6 +116,7 @@ Read the full [privacy notes](PRIVACY.md).
 - Only the **currently selected branch** is exported. Abandoned edit branches are not included.
 - Attachments are exported as **links**, not embedded files.
 - PDF uses the browser print dialog on purpose, which gives you page size, margins, and headers for free.
+- Exports are **rate-limited to 10 per 10 minutes with a 5-second cooldown**. This is enforced by the extension to prevent accidental or scripted spam.
 - Very large print jobs are capped at 18 MB. Markdown, text, HTML, and JSON are limited only by browser memory.
 - The interface follows your system light/dark preference.
 

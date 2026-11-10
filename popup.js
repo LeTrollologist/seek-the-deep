@@ -27,6 +27,8 @@
         info: null,
         busy: false,
         ready: false,
+        rateLimitedUntil: 0,
+        rateLimitTimer: null,
     };
 
     const elements = {
@@ -42,6 +44,7 @@
         formatGrid: document.getElementById("formatGrid"),
         formatNote: document.getElementById("formatNote"),
         formatHint: document.getElementById("formatHint"),
+        rateNote: document.getElementById("rateNote"),
         includeReasoning: document.getElementById("includeReasoning"),
         includeTimestamps: document.getElementById("includeTimestamps"),
         banner: document.getElementById("banner"),
@@ -173,17 +176,59 @@
         updateButtonLabel();
     }
 
+    function isRateLimited() {
+        return state.rateLimitedUntil > Date.now();
+    }
+
+    function rateLimitSeconds() {
+        return Math.max(1, Math.ceil((state.rateLimitedUntil - Date.now()) / 1000));
+    }
+
     function updateButtonLabel() {
         if (state.busy) return;
+        if (isRateLimited()) {
+            elements.buttonLabel.textContent = `Try again in ${rateLimitSeconds()}s`;
+            elements.exportBtn.disabled = true;
+            return;
+        }
         elements.buttonLabel.textContent = state.format === "pdf"
             ? PDF_LABEL
             : `Download ${formatLabel(state.format)}`;
     }
 
+    function stopRateLimitTimer() {
+        if (state.rateLimitTimer) {
+            clearInterval(state.rateLimitTimer);
+            state.rateLimitTimer = null;
+        }
+    }
+
+    function beginRateLimit(retryAfterMs, message) {
+        stopRateLimitTimer();
+        const wait = Math.max(1000, Number(retryAfterMs) || 1000);
+        state.rateLimitedUntil = Date.now() + wait;
+        elements.exportBtn.disabled = true;
+        setBanner("warning", message || `Export limit reached. Try again in ${Math.ceil(wait / 1000)} seconds.`);
+
+        const tick = () => {
+            if (!isRateLimited()) {
+                stopRateLimitTimer();
+                state.rateLimitedUntil = 0;
+                setBanner("success", "You can export again.");
+                if (state.ready) setReady(true);
+                updateButtonLabel();
+                return;
+            }
+            updateButtonLabel();
+        };
+        tick();
+        state.rateLimitTimer = setInterval(tick, 500);
+    }
+
     function setBusy(busy) {
         state.busy = busy;
         elements.exportBtn.classList.toggle("busy", busy);
-        elements.exportBtn.disabled = busy || !state.ready;
+        elements.exportBtn.disabled = busy || !state.ready || isRateLimited();
         if (busy) {
             elements.buttonLabel.textContent = state.format === "pdf"
                 ? "Preparing print view…"
@@ -195,7 +240,7 @@
 
     function setReady(ready) {
         state.ready = ready;
-        elements.exportBtn.disabled = !ready || state.busy;
+        elements.exportBtn.disabled = !ready || state.busy || isRateLimited();
         elements.refreshBtn.hidden = state.tabId == null;
     }
 
@@ -271,7 +316,7 @@
     }
 
     async function runExport() {
-        if (state.busy || !state.ready) return;
+        if (state.busy || !state.ready || isRateLimited()) return;
         clearBanner();
         setBusy(true);
 
@@ -286,23 +331,35 @@
             }, 60000);
 
             if (!response) throw new Error("The page returned an empty response.");
-            if (!response.ok) throw new Error(response.error || "The export failed.");
+            if (!response.ok) {
+                const failure = new Error(response.error || "The export failed.");
+                Object.assign(failure, response);
+                throw failure;
+            }
+
+            const remaining = response.rateLimit && Number.isFinite(Number(response.rateLimit.remaining))
+                ? ` ${response.rateLimit.remaining} of ${response.rateLimit.limit} exports left in this window.`
+                : "";
 
             if (response.print) {
                 setBanner(
                     "success",
-                    "Print view opened in a new tab. Choose “Save as PDF” in the print dialog."
+                    `Print view opened in a new tab. Choose “Save as PDF” in the print dialog.${remaining}`
                 );
             } else {
-                setBanner("success", `Downloaded ${response.filename || "your chat export"}.`);
+                setBanner("success", `Downloaded ${response.filename || "your chat export"}.${remaining}`);
             }
             if (response.warning) {
                 setTimeout(() => {
-                    if (!state.busy) setBanner("warning", response.warning);
+                    if (!state.busy && !isRateLimited()) setBanner("warning", response.warning);
                 }, 3500);
             }
         } catch (error) {
-            setBanner("error", error.message || String(error));
+            if (error.code === "RATE_LIMITED") {
+                beginRateLimit(error.retryAfterMs, error.message);
+            } else {
+                setBanner("error", error.message || String(error));
+            }
         } finally {
             setBusy(false);
         }
@@ -350,6 +407,8 @@
         state.includeTimestamps = Boolean(prefs.includeTimestamps);
         elements.includeReasoning.checked = state.includeReasoning;
         elements.includeTimestamps.checked = state.includeTimestamps;
+        const windowMinutes = Math.round(DS.RATE_LIMIT.windowMs / 60000);
+        elements.rateNote.textContent = `Rate-limited to ${DS.RATE_LIMIT.maxExports} exports per ${windowMinutes} minutes.`;
         updateFormatUI();
         bindEvents();
 

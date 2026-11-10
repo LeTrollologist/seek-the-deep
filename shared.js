@@ -23,6 +23,12 @@
         pdf: { label: "PDF", extension: "pdf", mime: "application/pdf" },
     };
 
+    const RATE_LIMIT = Object.freeze({
+        maxExports: 10,
+        windowMs: 10 * 60 * 1000,
+        minIntervalMs: 5000,
+    });
+
     const BLOCKED_SCHEMES = /^(?:javascript|vbscript|data|file):/i;
     const ALLOWED_SCHEMES = /^(?:https?:|mailto:)/i;
 
@@ -162,6 +168,52 @@
         const text = String(value == null ? "" : value).trim();
         if (!text) return 0;
         return (text.match(/[A-Za-z0-9\u00C0-\u024F\u0400-\u04FF\u4E00-\u9FFF]+/g) || []).length;
+    }
+
+    /**
+     * Pure rate-limit evaluator. The background worker calls this while
+     * holding a lock, then persists the returned timestamps.
+     */
+    function evaluateExportRateLimit(timestamps, now, config) {
+        const settings = Object.assign({}, RATE_LIMIT, config || {});
+        const current = Number.isFinite(now) ? now : Date.now();
+        const cutoff = current - settings.windowMs;
+        const recent = (Array.isArray(timestamps) ? timestamps : [])
+            .map((value) => Number(value))
+            .filter((value) => Number.isFinite(value) && value > cutoff && value <= current)
+            .sort((left, right) => left - right);
+
+        const cooldownRemaining = recent.length
+            ? Math.max(0, recent[recent.length - 1] + settings.minIntervalMs - current)
+            : 0;
+        const windowRemaining = recent.length >= settings.maxExports
+            ? Math.max(0, recent[recent.length - settings.maxExports] + settings.windowMs - current)
+            : 0;
+
+        if (cooldownRemaining > 0 || windowRemaining > 0) {
+            return {
+                allowed: false,
+                reason: windowRemaining > 0 ? "window" : "cooldown",
+                retryAfterMs: Math.max(1000, cooldownRemaining, windowRemaining),
+                remaining: Math.max(0, settings.maxExports - recent.length),
+                limit: settings.maxExports,
+                windowMs: settings.windowMs,
+                minIntervalMs: settings.minIntervalMs,
+                timestamps: recent,
+            };
+        }
+
+        const next = recent.concat(current);
+        return {
+            allowed: true,
+            retryAfterMs: 0,
+            remaining: Math.max(0, settings.maxExports - next.length),
+            limit: settings.maxExports,
+            windowMs: settings.windowMs,
+            minIntervalMs: settings.minIntervalMs,
+            resetAt: next[0] + settings.windowMs,
+            timestamps: next,
+        };
     }
 
     /* ---------------------------------------------------------------------
@@ -1072,6 +1124,7 @@ ${body}
         EXPORT_FORMAT,
         EXPORT_VERSION,
         FORMATS,
+        RATE_LIMIT,
         DOCUMENT_CSS,
         escapeHtml,
         safeUrl,
@@ -1087,6 +1140,7 @@ ${body}
         makeFilename,
         displayModelName,
         countWords,
+        evaluateExportRateLimit,
         renderMarkdown,
         normalizeApiConversation,
         normalizePageConversation,

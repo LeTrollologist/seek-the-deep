@@ -244,10 +244,40 @@
         };
     }
 
+    async function reserveExportSlot() {
+        const response = await runtimeMessage({ type: "DS_RESERVE_EXPORT" });
+        if (!response) {
+            throw new Error("The extension background service returned an empty response.");
+        }
+        if (!response.ok) {
+            const error = new Error(response.error || "The export limit has been reached.");
+            error.code = response.code;
+            error.retryAfterMs = response.retryAfterMs;
+            error.remaining = response.remaining;
+            error.limit = response.limit;
+            error.windowMs = response.windowMs;
+            throw error;
+        }
+        return response;
+    }
+
+    function rateLimitInfo(reservation) {
+        return {
+            remaining: reservation.remaining,
+            limit: reservation.limit,
+            windowMs: reservation.windowMs,
+            resetAt: reservation.resetAt,
+        };
+    }
+
     async function exportConversation(message) {
         const format = String(message.format || "md");
         if (!DS.FORMATS[format]) throw new Error("Unknown export format.");
         const options = normalizeOptions(message.options);
+
+        // Reserve before touching the API so rapid repeated exports cannot
+        // hammer DeepSeek, even if the export later fails.
+        const reservation = await reserveExportSlot();
         const { conversation, warning } = await getConversation(true);
 
         if (format === "pdf") {
@@ -267,6 +297,7 @@
                 print: true,
                 filename: `${base}.pdf`,
                 warning,
+                rateLimit: rateLimitInfo(reservation),
             };
         }
 
@@ -278,6 +309,7 @@
             filename,
             warning,
             bytes: new Blob([text]).size,
+            rateLimit: rateLimitInfo(reservation),
         };
     }
 
@@ -285,7 +317,7 @@
         if (!message || typeof message.type !== "string") return undefined;
 
         if (message.type === "DS_PING") {
-            sendResponse({ ok: true, version: "1.0.0" });
+            sendResponse({ ok: true, version: "1.1.0" });
             return undefined;
         }
 
@@ -312,7 +344,15 @@
         if (message.type === "DS_EXPORT") {
             exportConversation(message)
                 .then((result) => sendResponse(result))
-                .catch((error) => sendResponse({ ok: false, error: error.message }));
+                .catch((error) => sendResponse({
+                    ok: false,
+                    error: error.message,
+                    code: error.code,
+                    retryAfterMs: error.retryAfterMs,
+                    remaining: error.remaining,
+                    limit: error.limit,
+                    windowMs: error.windowMs,
+                }));
             return true;
         }
 

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Seek the Deep",
     "short_name": "Seek the Deep",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Download DeepSeek chats as Markdown, text, HTML, JSON, or PDF. Full history, processed locally.",
     "minimum_chrome_version": "109",
     "permissions": [

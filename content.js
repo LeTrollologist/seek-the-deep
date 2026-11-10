@@ -317,7 +317,7 @@
         if (!message || typeof message.type !== "string") return undefined;
 
         if (message.type === "DS_PING") {
-            sendResponse({ ok: true, version: "1.1.0" });
+            sendResponse({ ok: true, version: "1.1.1" });
             return undefined;
         }
 

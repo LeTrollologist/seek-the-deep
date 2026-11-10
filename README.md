@@ -4,13 +4,15 @@
 
 **A local-first DeepSeek chat exporter for Chrome, Edge, and other Chromium browsers.**
 
+**Unofficial.** Not affiliated with, endorsed by, or sponsored by DeepSeek.
+
 Keep the whole conversation. Take it with you as Markdown, plain text, HTML, JSON, or PDF.
 
 <br />
 
 <p align="center">
   <a href="https://github.com/LeTrollologist/seek-the-deep/releases">
-    <img src="https://img.shields.io/badge/Release-v1.1.0-2F7FA8?style=for-the-badge&logo=github&logoColor=E9FAFE&labelColor=061A2C" alt="Release v1.1.0" />
+    <img src="https://img.shields.io/badge/Release-v1.1.1-2F7FA8?style=for-the-badge&logo=github&logoColor=E9FAFE&labelColor=061A2C" alt="Release v1.1.1" />
   </a>
   <a href="manifest.json">
     <img src="https://img.shields.io/badge/Chrome-Manifest_V3-0E4F7D?style=for-the-badge&logo=googlechrome&logoColor=E9FAFE&labelColor=061A2C" alt="Chrome Manifest V3" />
@@ -78,7 +80,7 @@ Markdown preserves code fences, links, tables, lists, and blockquotes. HTML and 
 
 Requires Chrome 109+ or any Chromium browser with Manifest V3 support.
 
-1. Download the [latest release](https://github.com/LeTrollologist/seek-the-deep/releases/latest/download/seek-the-deep-1.1.0.zip) and unzip it.
+1. Download the [latest release](https://github.com/LeTrollologist/seek-the-deep/releases/latest/download/seek-the-deep-1.1.1.zip) and unzip it.
 2. Open `chrome://extensions/` — or `edge://extensions/`, `brave://extensions/`, etc.
 3. Turn on **Developer mode**.
 4. Click **Load unpacked** and select the folder containing `manifest.json`.
@@ -100,6 +102,12 @@ The popup tells you how many messages were found and whether they came from the 
 <div align="center">
   <img src="docs/print-preview.png" alt="Seek the Deep print and PDF view" width="620" />
 </div>
+
+## Responsible use
+
+Seek the Deep is for exporting **your own conversations, one at a time**. Do not use it to scrape, bulk-collect, republish, or overload DeepSeek. The 5-second cooldown and 10-per-10-minutes cap are guardrails, not permission. If DeepSeek raises a concern or changes its terms, the project may be paused or removed.
+
+Read the full [disclaimer and responsible-use notice](DISCLAIMER.md).
 
 ## Privacy
 

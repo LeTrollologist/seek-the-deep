@@ -50,6 +50,7 @@
         banner: document.getElementById("banner"),
         exportBtn: document.getElementById("exportBtn"),
         buttonLabel: document.querySelector("#exportBtn .button-label"),
+        disclaimerLink: document.getElementById("disclaimerLink"),
     };
 
     function isChatUrl(value) {
@@ -395,6 +396,12 @@
 
         elements.exportBtn.addEventListener("click", runExport);
         elements.refreshBtn.addEventListener("click", () => loadInfo(true));
+        elements.disclaimerLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            chrome.tabs.create({
+                url: "https://github.com/LeTrollologist/seek-the-deep/blob/main/DISCLAIMER.md",
+            });
+        });
         elements.openSiteBtn.addEventListener("click", () => {
             chrome.tabs.create({ url: "https://chat.deepseek.com/" });
         });
@@ -408,7 +415,9 @@
         elements.includeReasoning.checked = state.includeReasoning;
         elements.includeTimestamps.checked = state.includeTimestamps;
         const windowMinutes = Math.round(DS.RATE_LIMIT.windowMs / 60000);
-        elements.rateNote.textContent = `Rate-limited to ${DS.RATE_LIMIT.maxExports} exports per ${windowMinutes} minutes.`;
+        elements.rateNote.textContent = `Rate-limited to ${DS.RATE_LIMIT.maxExports} exports per ${windowMinutes} minutes. Use responsibly.`;
+        elements.rateNote.title = "Do not overload DeepSeek's API. Export only your own conversations, one at a time.";
+        elements.exportBtn.title = "Use only on your own conversations. Exports are rate-limited.";
         updateFormatUI();
         bindEvents();
 

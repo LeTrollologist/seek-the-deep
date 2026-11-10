@@ -7,6 +7,7 @@ Seek the Deep is local-first.
 - The only network request is to `https://chat.deepseek.com`, using the session token already present in the DeepSeek tab, to download the current conversation from DeepSeek's own web API.
 - Export rendering happens entirely in your browser.
 - Preferences are stored in `chrome.storage.sync`, which may be synchronized by your browser if you have browser sync enabled.
+- Recent export timestamps are stored in `chrome.storage.local` only to enforce the export rate limit. They contain no conversation content.
 - The current printable document is stored temporarily in `chrome.storage.local` so it can be opened in the print tab. It is replaced on the next PDF export.
 - No remote code is loaded. All scripts and styles ship inside the extension package.
 

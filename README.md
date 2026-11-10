@@ -107,6 +107,7 @@ The popup tells you how many messages were found and whether they came from the 
 - The only network request goes to `https://chat.deepseek.com`: the same session you are already using, with the token already stored in that tab.
 - Exports are generated locally.
 - Preferences live in `chrome.storage.sync`; the current print document is briefly stored in `chrome.storage.local`.
+- Recent export timestamps are stored locally only to enforce the rate limit — no conversation content is included.
 - No remote code is loaded.
 
 Read the full [privacy notes](PRIVACY.md).
